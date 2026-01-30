@@ -112,6 +112,23 @@
                 ]
               }
             }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channelType": {
+                "type": "string",
+                "enum": [
+                  "Talk-to-Data"
+                ]
+              },
+              "queryType": {
+                "type": "string",
+                "enum": [
+                  "SQL"
+                ]
+              }
+            }
           }
         ]
       },
