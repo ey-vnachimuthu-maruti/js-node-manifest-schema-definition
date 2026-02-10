@@ -16,7 +16,8 @@
 			"type": "string",
 			"enum": [
 				"PII",
-				"nonPII"
+				"nonPII",
+				"potentialPII"
 			]
 		},
 		"dataOrigin": {
