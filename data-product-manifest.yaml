@@ -1,0 +1,194 @@
+jobId: "1636"
+jobName: Work Order Consumption copy copy copy
+jobType: Source Aligned Data Product
+developerId: 8e25fbd3-c6cc-429c-9aff-d7697bb39825
+domain: production
+alias: Load_final_state_for_EMS_Item_Consumption
+discoveryPort:
+  name: Work Order Consumption copy copy copy
+inputPorts:
+  - alias: EMS_Item_Consumption_1
+    isDynamic: true
+    path: s3://path-to-data-set
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: msil-dataverse-production
+      dataSetUrn: urn:dv:dataset:6574f733-0dec-4a06-a8ff-4ddd1bbcc4aa
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: Load_final_state_for_EMS_Item_Consumption
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      Consume_Quantity:
+        type: DECIMAL
+        description: Quantity Consumed in the workorder
+        sourceColumn: Consume_Quantity
+        sourceTable: EMS Item Consumption Report
+      Creation_Date:
+        type: DATETIME
+        description: Date of creation
+        sourceColumn: Creation_Date
+        sourceTable: EMS Item Consumption Report
+      Company_Code:
+        type: STRING
+        description: Company code
+        sourceColumn: MWTI_Company_Code
+        sourceTable: EMS Item Consumption Report
+      Item_Code:
+        type: STRING
+        description: Unique item code used for the workorder
+        sourceColumn: Item_Code
+        sourceTable: EMS Item Consumption Report
+      Item_Price:
+        type: DECIMAL
+        description: Item price
+        sourceColumn: Item_Price
+        sourceTable: EMS Item Consumption Report
+      Task_Code:
+        type: STRING
+        description: Task code associated with the workorder
+        sourceColumn: Task_Code
+        sourceTable: EMS Item Consumption Report
+      UOM:
+        type: STRING
+        description: Unit of the item
+        sourceColumn: UOM
+        sourceTable: EMS Item Consumption Report
+      Quantity:
+        type: DECIMAL
+        description: Quantity of the item
+        sourceColumn: Quantity
+        sourceTable: EMS Item Consumption Report
+      Requirement_Number:
+        type: STRING
+        description: Unique requirement number associated with the workorder
+        sourceColumn: Requirement_Number
+        sourceTable: EMS Item Consumption Report
+      User_Id:
+        type: STRING
+        description: User id of the user who raised the workorder
+        sourceColumn: User_Id
+        sourceTable: EMS Item Consumption Report
+      WO_Number:
+        type: STRING
+        description: Unique workorder number
+        sourceColumn: WO_Number
+        sourceTable: EMS Item Consumption Report
+      WO_Creation_Date:
+        type: DATETIME
+        description: Workorder creation date
+        sourceColumn: WO_Creation_Date
+        sourceTable: EMS Item Consumption Report
+      Work_Order_Type:
+        type: STRING
+        description: Workorder type (breakdown, preventive etc)
+        sourceColumn: Work_Order_Type
+        sourceTable: EMS Item Consumption Report
+      Equipment_Code:
+        type: STRING
+        description: Equipment code associated with the workorder
+        sourceColumn: Equipment_Code
+        sourceTable: EMS Item Consumption Report
+      WO_Company_Code:
+        type: STRING
+        description: Workorder company code
+        sourceColumn: WO_Company_Code
+        sourceTable: EMS Item Consumption Report
+      Transaction_Quantity:
+        type: DECIMAL
+        description: Quantity that was transacted to cater to the workorder
+        sourceColumn: Transaction_Quantity
+        sourceTable: EMS Item Consumption Report
+      Rate:
+        type: DECIMAL
+        description: Rate of the item
+        sourceColumn: Rate
+        sourceTable: EMS Item Consumption Report
+      Amount:
+        type: DECIMAL
+        description: Amount calculated as a product of rate and stock quantity
+        sourceColumn: Amount
+        sourceTable: EMS Item Consumption Report
+      Department_Code:
+        type: STRING
+        description: Department code associated with the workorder
+        sourceColumn: Department_Code
+        sourceTable: EMS Item Consumption Report
+      Section:
+        type: STRING
+        description: Section associated with the workorder
+        sourceColumn: Section
+        sourceTable: EMS Item Consumption Report
+      Return_Quantity:
+        type: STRING
+        description: Return quantity for the workorder
+        sourceColumn: Return_Quantity
+        sourceTable: EMS Item Consumption Report
+      Return_Item_Code:
+        type: STRING
+        description: Item code that is returned
+        sourceColumn: Return_Item_Code
+        sourceTable: EMS Item Consumption Report
+      Return_Document_Number:
+        type: STRING
+        description: Document number for the return tagged
+        sourceColumn: Return_Document_Number
+        sourceTable: EMS Item Consumption Report
+      ETL_Inserted_Date:
+        type: DATETIME
+        description: ETL Audit Field to identify record insertion date
+        sourceColumn: ""
+        sourceTable: ""
+      ETL_Modified_Date:
+        type: DATETIME
+        description: ETL Audit Field to identify record modified date
+        sourceColumn: ""
+        sourceTable: ""
+      ETL_Created_By:
+        type: STRING
+        description: ETL Audit Field to identify record created by user
+        sourceColumn: ""
+        sourceTable: ""
+      ETL_Updated_By:
+        type: STRING
+        description: ETL Audit Field to identify record modified by user
+        sourceColumn: ""
+        sourceTable: ""
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_production_catalog_dev.Work_Order_Consumption
+  warehousePath: s3://msil-dataverse-production-dev/
+  catalogName: glue
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: true
+    catalogType: glue
+  refreshInterval: 0 15 * * *
+transformation:
+  - isDynamic: true
+    alias: SelectColumns
+    description: SelectColumns
+    sequence: 2
+    inputDataFrameList:
+      - inputDataFrame: EMS_Item_Consumption_1
+        tempViewName: df_cons
+    query: select current_timestamp() as etl_inserted_date,current_timestamp() as
+      etl_modified_date,'platform_admin' as etl_created_by,'platform_admin' as
+      etl_updated_by,MNSTI_MNRT_CODE,Consume_Quantity,Creation_Date,MWTI_Company_Code
+      AS
+      Company_Code,Item_Code,Item_Price,Task_Code,UOM,Quantity,Requirement_Number,User_Id,Order_number,Consumption_Date,Type,Equipment_Code,Transaction_Quantity,Rate,Amount,Department_Code,Section,Return_Quantity,Return_Item_Code,Return_Document_Number
+      from df_cons
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+timeout: 5
