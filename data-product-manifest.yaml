@@ -1,11 +1,11 @@
-jobId: "1502"
-jobName: Work Order Consumption
+jobId: "1644"
+jobName: Work Order Consumption copy copy copy copy copy copy copy copy copy
 jobType: Source Aligned Data Product
 developerId: 8e25fbd3-c6cc-429c-9aff-d7697bb39825
 domain: production
 alias: Load_final_state_for_EMS_Item_Consumption
 discoveryPort:
-  name: Work Order Consumption
+  name: Work Order Consumption copy copy copy copy copy copy copy copy copy
 inputPorts:
   - alias: EMS_Item_Consumption_1
     isDynamic: true
@@ -31,7 +31,7 @@ productState:
         sourceColumn: Consume_Quantity
         sourceTable: EMS Item Consumption Report
       Creation_Date:
-        type: DECIMAL
+        type: DATETIME
         description: Date of creation
         sourceColumn: Creation_Date
         sourceTable: EMS Item Consumption Report
