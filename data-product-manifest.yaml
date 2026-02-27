@@ -1,0 +1,60 @@
+jobId: "1653"
+jobName: QA_DP copy
+jobType: Source Aligned Data Product
+developerId: 25cb9b97-004b-46d8-95c5-90c60d7e0de7
+domain: engineering
+alias: write_to_iceberg
+discoveryPort:
+  name: QA_DP copy
+inputPorts:
+  - alias: read_csv_1
+    isDynamic: true
+    path: s3://msil-data-lake-curated-dev/sr7/dets_de/dets_eqmt
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: true
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3_reading_CSV
+      dataSetUrn: urn:dv:dataset:3bef2733-d7d2-43e5-9fc5-7e495db08860
+    type: inputParquet
+productState:
+  isDynamic: true
+  alias: write_to_iceberg
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      A:
+        type: DATETIME
+        description: ""
+        sourceColumn: test
+        sourceTable: test-table
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_dev_engineering_catalog.test_vishnu_pq
+  warehousePath: s3://msil-dataverse-dev-engineering/test_curated_consumption/
+  catalogName: msil_dataverse_dev_engineering_catalog
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: glue
+  refreshInterval: 45 8 * * *
+transformation:
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: read_pq
+    sequence: 2
+    inputDataFrameList:
+      - inputDataFrame: read_csv_1
+        tempViewName: temp
+    query: select * from temp limit 10;
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+timeout: 5
